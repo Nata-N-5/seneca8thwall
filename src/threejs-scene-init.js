@@ -1,7 +1,7 @@
 // Define an 8th Wall XR Camera Pipeline Module that adds a cube to a threejs scene on startup.
 import * as THREE from 'three';
-
-import cubeTexture from './assets/cube-texture.png'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+//import cubeTexture from './assets/cube-texture.png'
 
 export const initScenePipelineModule = () => {
   const purple = 0xAD50FF
@@ -18,17 +18,16 @@ export const initScenePipelineModule = () => {
     scene.add(directionalLight)
 
     // Add a purple cube that casts a shadow.
-    const material = new THREE.MeshBasicMaterial()
-    material.side = THREE.DoubleSide
-    material.map = new THREE.TextureLoader().load(
-      cubeTexture
-    )
-    material.color = new THREE.Color(0xAD50FF)
+const loader = new GLTFLoader()
 
-    const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material)
-    cube.position.set(0, 0.5, 0)
-    cube.castShadow = true
-    scene.add(cube)
+loader.load('./assets/goaat1.glb', (gltf) => {
+  const goat = gltf.scene
+
+  goat.position.set(0, 0, 0)
+  goat.scale.set(1, 1, 1)
+
+  scene.add(goat)
+})
 
     // Add a plane that can receive shadows.
     const planeGeometry = new THREE.PlaneGeometry(2000, 2000)
