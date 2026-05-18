@@ -5,14 +5,23 @@ import goatModel from './assets/goaat1.glb?url'
 
 export const initScenePipelineModule = () => {
   const purple = 0xAD50FF
+  const clock = new THREE.Clock()
+  let goatMixer = null
 
   // Populates the goat model into an XR scene and sets the initial camera position.
   const initXrScene = ({scene, camera, renderer}) => {
     // Enable shadows in the renderer.
     renderer.shadowMap.enabled = true
+    renderer.outputColorSpace = THREE.SRGBColorSpace
 
     // Add some light to the scene.
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4)
+    scene.add(ambientLight)
+
+    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x555555, 1.2)
+    scene.add(hemisphereLight)
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8)
     directionalLight.position.set(5, 10, 7)
     directionalLight.castShadow = true
     scene.add(directionalLight)
@@ -26,9 +35,20 @@ export const initScenePipelineModule = () => {
       goat.traverse((child) => {
         if (child.isMesh) {
           child.castShadow = true
-          child.receiveShadow = true
+          child.receiveShadow = false
+
+          if (child.material) {
+            child.material.side = THREE.DoubleSide
+          }
         }
       })
+
+      if (gltf.animations.length) {
+        goatMixer = new THREE.AnimationMixer(goat)
+        gltf.animations.forEach((clip) => {
+          goatMixer.clipAction(clip).play()
+        })
+      }
 
       scene.add(goat)
     })
@@ -54,6 +74,11 @@ export const initScenePipelineModule = () => {
     // Camera pipeline modules need a name. It can be whatever you want but must be unique within
     // your app.
     name: 'threejsinitscene',
+    onUpdate: () => {
+      if (goatMixer) {
+        goatMixer.update(clock.getDelta())
+      }
+    },
 
     // onStart is called once when the camera feed begins. In this case, we need to wait for the
     // XR8.Threejs scene to be ready before we can access it to add content. It was created in
