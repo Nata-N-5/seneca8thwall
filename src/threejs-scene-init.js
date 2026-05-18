@@ -4,9 +4,29 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import goatModel from './assets/goaat1.glb?url'
 
 export const initScenePipelineModule = () => {
-  const purple = 0xAD50FF
   const clock = new THREE.Clock()
+  const minGoatScale = 0.25
+  const maxGoatScale = 4
   let goatMixer = null
+  let goatModelObject = null
+  let pinchStartDistance = 0
+  let pinchStartScale = 1
+
+  const getTouchDistance = (touches) => {
+    const dx = touches[0].clientX - touches[1].clientX
+    const dy = touches[0].clientY - touches[1].clientY
+
+    return Math.hypot(dx, dy)
+  }
+
+  const setGoatScale = (scale) => {
+    if (!goatModelObject) {
+      return
+    }
+
+    const nextScale = THREE.MathUtils.clamp(scale, minGoatScale, maxGoatScale)
+    goatModelObject.scale.setScalar(nextScale)
+  }
 
   // Populates the goat model into an XR scene and sets the initial camera position.
   const initXrScene = ({scene, camera, renderer}) => {
@@ -29,9 +49,10 @@ export const initScenePipelineModule = () => {
     const loader = new GLTFLoader()
     loader.load(goatModel, (gltf) => {
       const goat = gltf.scene
+      goatModelObject = goat
 
       goat.position.set(0, 0, 0)
-      goat.scale.set(1, 1, 1)
+      goat.scale.setScalar(1)
       goat.traverse((child) => {
         if (child.isMesh) {
           child.castShadow = true
@@ -88,9 +109,33 @@ export const initScenePipelineModule = () => {
 
       initXrScene({scene, camera, renderer})  // Add objects set the starting camera position.
 
-      // prevent scroll/pinch gestures on canvas
-      canvas.addEventListener('touchmove', (event) => {
-        event.preventDefault()
+      // Scale the goat with a two-finger pinch.
+      canvas.addEventListener(
+        'touchstart',
+        (event) => {
+          if (event.touches.length === 2 && goatModelObject) {
+            pinchStartDistance = getTouchDistance(event.touches)
+            pinchStartScale = goatModelObject.scale.x
+          }
+        },
+        true
+      )
+
+      canvas.addEventListener(
+        'touchmove',
+        (event) => {
+          event.preventDefault()
+
+          if (event.touches.length === 2 && goatModelObject && pinchStartDistance > 0) {
+            const currentDistance = getTouchDistance(event.touches)
+            setGoatScale(pinchStartScale * (currentDistance / pinchStartDistance))
+          }
+        },
+        {passive: false}
+      )
+
+      canvas.addEventListener('touchend', () => {
+        pinchStartDistance = 0
       })
 
       // Sync the xr controller's 6DoF position and camera paremeters with our scene.
