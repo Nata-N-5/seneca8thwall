@@ -1,14 +1,14 @@
-// Define an 8th Wall XR Camera Pipeline Module that adds a cube to a threejs scene on startup.
+// Define an 8th Wall XR Camera Pipeline Module that adds a model to a threejs scene on startup.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import cubeTexture from './assets/cube-texture.png'
+import goatModel from './assets/goaat1.glb?url'
 
 export const initScenePipelineModule = () => {
   const purple = 0xAD50FF
 
-  // Populates a cube into an XR scene and sets the initial camera position.
+  // Populates the goat model into an XR scene and sets the initial camera position.
   const initXrScene = ({scene, camera, renderer}) => {
-    // Enable shadows in the rednerer.
+    // Enable shadows in the renderer.
     renderer.shadowMap.enabled = true
 
     // Add some light to the scene.
@@ -17,29 +17,21 @@ export const initScenePipelineModule = () => {
     directionalLight.castShadow = true
     scene.add(directionalLight)
 
-    // Add a purple cube that casts a shadow.
-        const material = new THREE.MeshBasicMaterial()
-    material.side = THREE.DoubleSide
-    material.map = new THREE.TextureLoader().load(
-      cubeTexture
-    )
-    material.color = new THREE.Color(0xAD50FF)
+    const loader = new GLTFLoader()
+    loader.load(goatModel, (gltf) => {
+      const goat = gltf.scene
 
-    const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material)
-    cube.position.set(0, 0.5, 0)
-    cube.castShadow = true
-    scene.add(cube)
+      goat.position.set(0, 0, 0)
+      goat.scale.set(1, 1, 1)
+      goat.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true
+          child.receiveShadow = true
+        }
+      })
 
-const loader = new GLTFLoader()
-
-loader.load('./assets/goaat1.glb', (gltf) => {
-  const goat = gltf.scene
-
-  goat.position.set(0, 0, 0)
-  goat.scale.set(1, 1, 1)
-
-  scene.add(goat)
-})
+      scene.add(goat)
+    })
 
     // Add a plane that can receive shadows.
     const planeGeometry = new THREE.PlaneGeometry(2000, 2000)
