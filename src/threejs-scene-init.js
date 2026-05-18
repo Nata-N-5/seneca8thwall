@@ -1,6 +1,6 @@
 // Define an 8th Wall XR Camera Pipeline Module that adds a cube to a threejs scene on startup.
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 //import cubeTexture from './assets/cube-texture.png'
 
 export const initScenePipelineModule = () => {
