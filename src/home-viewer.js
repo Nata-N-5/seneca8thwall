@@ -59,7 +59,7 @@ const fitModel = (object) => {
 
   object.scale.setScalar(scale)
   object.position.sub(center.multiplyScalar(scale))
-  object.position.y += 0.6
+  object.position.y += 1.2
 }
 
 const resize = () => {
