@@ -41,7 +41,7 @@
         display: grid;
         grid-template-rows: auto 1fr auto;
         min-height: 100vh;
-        padding: clamp(16px, 3.5vw, 36px) clamp(16px, 4vw, 32px) clamp(14px, 3vw, 28px);
+        padding: clamp(24px, 5vw, 48px) clamp(16px, 4vw, 32px);
       }
 
       header {
@@ -99,9 +99,9 @@
 
       .viewer-wrap {
         width: 100%;
-        height: min(50vh, 560px);
+        height: min(55vh, 600px);
         align-self: center;
-        margin: -34px 0 -22px;
+        margin: 10px 0;
       }
 
       #goat-viewer {
@@ -123,7 +123,7 @@
         gap: 16px;
         width: min(90vw, 320px);
         min-height: 58px;
-        margin: -18px auto 0;
+        margin: 0 auto;
         padding: 10px 24px;
         border: 2px solid #bdfc5d;
         border-radius: 999px;
@@ -166,22 +166,11 @@
 
       .hint {
         max-width: 80%;
-        margin-top: 8px;
+        margin-top: 10px;
         color: #72aa74;
         font-size: 0.95rem;
         font-weight: 600;
         text-align: center;
-      }
-
-      @media (max-width: 560px) {
-        .viewer-wrap {
-          height: 48vh;
-          margin: -48px 0 -34px;
-        }
-
-        .ar-button {
-          margin-top: -28px;
-        }
       }
     </style>
   </head>
