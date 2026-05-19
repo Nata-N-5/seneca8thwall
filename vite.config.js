@@ -5,4 +5,12 @@ export default defineConfig({
   server: {
     allowedHosts: ['.ngrok-free.dev'],
   },
+  build: {
+    rolldownOptions: {
+      input: {
+        main: 'index.html',
+        ar: 'ar.html',
+      },
+    },
+  },
 });

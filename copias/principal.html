@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quimica con Seneca - AR</title>
+    <title>Química con Séneca - AR</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,10 +19,10 @@
         color-scheme: dark;
         --bg: #020b08;
         --green: #a6ff4d;
-        --green-bright: #6fff00;
+        --green-bright: #6fff00; /* Verde neón para resaltar palabras clave */
         --green-soft: #d8ff8e;
         --text: #ffffff;
-        --muted: #b6caba;
+        --muted: #b6caba; /* Color un poco más suave para el subtítulo pequeño */
       }
 
       * {
@@ -33,12 +33,12 @@
         margin: 0;
         min-height: 100vh;
         overflow-x: hidden;
-        font-family: "Rajdhani", sans-serif;
+        font-family: 'Rajdhani', sans-serif;
         color: var(--text);
         background:
-          linear-gradient(180deg, rgba(1, 9, 8, 0.2), rgba(1, 10, 8, 0.72)),
-          radial-gradient(circle at 50% 30%, rgba(132, 255, 70, 0.16), transparent 35rem),
-          radial-gradient(circle at 18% 85%, rgba(0, 174, 255, 0.12), transparent 24rem),
+          linear-gradient(180deg, rgba(1, 9, 8, 0.174), rgba(1, 10, 8, 0.58)),
+          radial-gradient(circle at 50% 30%, rgba(132, 255, 70, 0.15), transparent 35rem),
+          url("Assets/img/backg.png") center top / cover no-repeat,
           var(--bg);
       }
 
@@ -52,30 +52,25 @@
       header {
         position: relative;
         z-index: 2;
-        max-width: 620px;
-        margin: 0 auto;
         text-align: center;
+        max-width: 600px;
+        margin: 0 auto;
       }
 
+      /* Contenedor Flex para alinear el SVG y el Título lado a lado */
       .brand-container {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 18px;
+        gap: 18px; /* Espacio entre el matraz y el texto */
         margin-bottom: 12px;
       }
 
       .brand-logo {
-        display: grid;
-        width: clamp(60px, 15vw, 85px);
-        aspect-ratio: 1;
-        place-items: center;
-        border: 2px solid rgba(166, 255, 77, 0.72);
-        border-radius: 50%;
-        box-shadow: 0 0 24px rgba(111, 255, 0, 0.28);
-        color: var(--green-bright);
-        font-size: clamp(2rem, 8vw, 3.1rem);
-        font-weight: 900;
+        width: clamp(60px, 15vw, 85px); /* Tamaño responsivo para el SVG del matraz */
+        height: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 0 12px rgba(111, 255, 0, 0.5)); /* Efecto de brillo neón al SVG */
       }
 
       h1 {
@@ -83,25 +78,27 @@
         font-size: clamp(2.3rem, 8.5vw, 3.8rem);
         font-weight: 700;
         line-height: 1.05;
-        text-align: left;
+        letter-spacing: 0.5px;
+        text-align: left; /* Alineado a la izquierda respecto al logo */
         text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
       }
 
       h1 span {
         display: block;
       }
-
+      
       h1 .destacado {
         font-weight: 900;
         color: var(--green-bright);
         text-shadow: 0 0 20px rgba(111, 255, 0, 0.4);
       }
 
+      /* Subtítulo más pequeño y estilizado */
       p {
         max-width: 440px;
         margin: 8px auto 0;
         color: var(--muted);
-        font-size: clamp(0.95rem, 3vw, 1.15rem);
+        font-size: clamp(0.95rem, 3vw, 1.15rem); /* Reducido para que se vea más fino */
         font-weight: 500;
         line-height: 1.35;
         text-wrap: balance;
@@ -116,6 +113,7 @@
         margin: 10px 0;
       }
 
+      /* Botón Principal (Ver cabrita en AR) */
       .ar-button {
         display: flex;
         align-items: center;
@@ -133,7 +131,7 @@
           0 0 0 8px rgba(111, 255, 0, 0.15),
           0 10px 25px rgba(95, 194, 17, 0.4),
           inset 0 2px 2px rgba(255, 255, 255, 0.6);
-        font-family: "Rajdhani", sans-serif;
+        font-family: 'Rajdhani', sans-serif;
         font-size: clamp(1.4rem, 5.5vw, 1.8rem);
         font-weight: 700;
         cursor: pointer;
@@ -144,22 +142,10 @@
         transform: scale(0.97);
       }
 
-      .camera-icon {
-        display: grid;
+      .ar-button img {
         width: 32px;
         height: 32px;
-        place-items: center;
-        border: 3px solid #041407;
-        border-radius: 10px;
-        position: relative;
-      }
-
-      .camera-icon::before {
-        width: 10px;
-        height: 10px;
-        border: 3px solid #041407;
-        border-radius: 50%;
-        content: "";
+        object-fit: contain;
       }
 
       .divider {
@@ -175,6 +161,7 @@
         margin-bottom: 10px;
       }
 
+      /* Botón Inferior (Cambiar reactivo) */
       .eat-button {
         min-width: 260px;
         min-height: 52px;
@@ -186,7 +173,7 @@
         box-shadow:
           0 0 15px rgba(111, 255, 0, 0.25),
           inset 0 0 12px rgba(111, 255, 0, 0.15);
-        font-family: "Rajdhani", sans-serif;
+        font-family: 'Rajdhani', sans-serif;
         font-size: 1.25rem;
         font-weight: 700;
         letter-spacing: 1px;
@@ -207,12 +194,12 @@
       }
 
       .hint {
-        max-width: 80%;
         margin-top: 10px;
         color: #72aa74;
         font-size: 0.95rem;
         font-weight: 600;
         text-align: center;
+        max-width: 80%;
       }
     </style>
   </head>
@@ -220,88 +207,90 @@
     <main class="app">
       <header>
         <div class="brand-container">
-          <div class="brand-logo" aria-hidden="true">S</div>
+          <img src="Assets/svg/ender.svg" class="brand-logo" alt="Matraz Erlenmeyer Logo" />
           <h1>
-            <span>Quimica</span>
-            <span class="destacado">con Seneca</span>
+            <span>Química</span> 
+            <span class="destacado">con Séneca</span>
           </h1>
         </div>
-
+        
         <p>
-          Explora conceptos de quimica en realidad aumentada.
-          Interactua con modelos y experimentos de forma dinamica.
+          Explora conceptos de química en realidad aumentada. 
+          Interactúa con modelos y experimentos de forma dinámica.
         </p>
       </header>
 
       <model-viewer
         id="goat-viewer"
-        src="./goaat3.glb"
-        alt="Cabrita en vista 3D"
+        src="Assets/cabritaS.glb"
+        alt="Cabrita en realidad aumentada"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        ar-placement="floor"
         camera-controls
         auto-rotate
-        autoplay
-        animation-name="idle"
         shadow-intensity="1"
         exposure="1"
         interaction-prompt="auto">
+        <button class="ar-button" slot="ar-button" type="button">
+          <img src="Assets/svg/camera-ON.svg" alt="Icono Cámara">
+          <span class="divider" aria-hidden="true"></span>
+          <span>Ver cabrita en AR</span>
+        </button>
       </model-viewer>
-
-      <button id="open-ar" class="ar-button" type="button">
-        <span class="camera-icon" aria-hidden="true"></span>
-        <span class="divider" aria-hidden="true"></span>
-        <span>Ver cabrita en AR</span>
-      </button>
 
       <div class="action-row">
         <button id="change-color" class="eat-button" type="button">Cambiar reactivo</button>
       </div>
 
       <footer>
-        <div id="status-text" class="hint">Toca el boton superior para abrir la experiencia 8th Wall.</div>
+        <div id="status-text" class="hint">En Android compatible, toca el botón superior para iniciar la experiencia.</div>
       </footer>
     </main>
 
     <script type="module">
-      const viewer = document.querySelector('#goat-viewer')
-      const openArButton = document.querySelector('#open-ar')
-      const changeButton = document.querySelector('#change-color')
+      const viewer = document.querySelector('#goat-viewer');
+      const changeButton = document.querySelector('#change-color');
+      const statusText = document.querySelector('#status-text');
 
       const colors = [
         [0, 1, 0.4, 1],
         [1, 0, 1, 1],
         [0, 0.8, 1, 1],
         [1, 1, 0, 1],
-        [1, 0.4, 0, 1],
-      ]
+        [1, 0.4, 0, 1]
+      ];
 
-      let colorIndex = 0
+      let colorIndex = 0;
 
-      const findEditableMaterial = () => {
-        if (!viewer.model) {
-          return null
-        }
+      const findLiquidMaterial = () => {
+        if (!viewer.model) return null;
 
-        return viewer.model.materials.find((material) => material.name.toLowerCase().includes('liquid'))
-          || viewer.model.materials.find((material) => material.name.toLowerCase().includes('material'))
-          || viewer.model.materials[0]
-      }
-
-      openArButton.addEventListener('click', () => {
-        window.location.href = './ar.html'
-      })
+        return viewer.model.materials.find((material) => material.name === 'Material')
+          || viewer.model.materials.find((material) => material.name === 'liquid')
+          || viewer.model.materials.find((material) => material.name.toLowerCase().includes('liquid'))
+          || viewer.model.materials[1];
+      };
 
       changeButton.addEventListener('click', async () => {
-        await viewer.updateComplete
+        await viewer.updateComplete;
 
-        const material = findEditableMaterial()
+        const material = findLiquidMaterial();
 
         if (!material) {
-          return
+          const names = viewer.model
+            ? viewer.model.materials.map((item) => item.name).join(', ')
+            : 'modelo no cargado';
+
+          console.warn('No encontré el material de liquid. Materiales disponibles:', names);
+          //statusText.textContent = 'No encontré el material líquido. Revisa la consola.';
+          return;
         }
 
-        colorIndex = (colorIndex + 1) % colors.length
-        material.pbrMetallicRoughness.setBaseColorFactor(colors[colorIndex])
-      })
+        colorIndex = (colorIndex + 1) % colors.length;
+        material.pbrMetallicRoughness.setBaseColorFactor(colors[colorIndex]);
+        //statusText.textContent = 'Color cambiado en ' + material.name + '.';
+      });
     </script>
   </body>
 </html>

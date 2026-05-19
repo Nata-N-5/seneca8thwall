@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Cabrita en AR</title>
+    <meta name="description" content="Experiencia AR de la cabrita con 8th Wall">
+
+    <script src="https://cdn.jsdelivr.net/npm/@8thwall/engine-binary@1/dist/xr.js" async crossorigin="anonymous" data-preload-chunks="slam"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@8thwall/xrextras@1/dist/xrextras.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@8thwall/landing-page@1/dist/landing-page.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="src/index.css">
+  </head>
+  <body>
+    <canvas id="camerafeed"></canvas>
+    <button id="wave-button" class="wave-button" type="button" disabled>Saludar</button>
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>
