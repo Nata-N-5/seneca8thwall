@@ -1,7 +1,7 @@
 // Define an 8th Wall XR Camera Pipeline Module that adds a model to a threejs scene on startup.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import goatModel from './assets/goaat1.glb?url'
+import goatModel from './assets/goaat3.glb?url'
 
 export const initScenePipelineModule = () => {
   const clock = new THREE.Clock()
@@ -9,6 +9,9 @@ export const initScenePipelineModule = () => {
   const maxGoatScale = 4
   let goatMixer = null
   let goatModelObject = null
+  let idleAction = null
+  let waveAction = null
+  let waveButton = null
   let pinchStartDistance = 0
   let pinchStartScale = 1
 
@@ -26,6 +29,33 @@ export const initScenePipelineModule = () => {
 
     const nextScale = THREE.MathUtils.clamp(scale, minGoatScale, maxGoatScale)
     goatModelObject.scale.setScalar(nextScale)
+  }
+
+  const playIdle = () => {
+    if (!idleAction) {
+      return
+    }
+
+    idleAction.reset()
+    idleAction.fadeIn(0.2)
+    idleAction.play()
+  }
+
+  const playWave = () => {
+    if (!idleAction || !waveAction) {
+      return
+    }
+
+    if (waveButton) {
+      waveButton.disabled = true
+    }
+
+    idleAction.fadeOut(0.15)
+    waveAction.reset()
+    waveAction.setLoop(THREE.LoopOnce, 1)
+    waveAction.clampWhenFinished = false
+    waveAction.fadeIn(0.15)
+    waveAction.play()
   }
 
   // Populates the goat model into an XR scene and sets the initial camera position.
@@ -66,9 +96,38 @@ export const initScenePipelineModule = () => {
 
       if (gltf.animations.length) {
         goatMixer = new THREE.AnimationMixer(goat)
-        gltf.animations.forEach((clip) => {
-          goatMixer.clipAction(clip).play()
-        })
+        const clipsByName = Object.fromEntries(
+          gltf.animations.map((clip) => [clip.name.toLowerCase(), clip])
+        )
+        const idleClip = clipsByName.idle
+        const waveClip = clipsByName.wave || clipsByName.saludar
+
+        if (idleClip) {
+          idleAction = goatMixer.clipAction(idleClip)
+          playIdle()
+        }
+
+        if (waveClip) {
+          waveAction = goatMixer.clipAction(waveClip)
+          waveAction.enabled = true
+
+          goatMixer.addEventListener('finished', (event) => {
+            if (event.action !== waveAction) {
+              return
+            }
+
+            waveAction.fadeOut(0.1)
+            playIdle()
+
+            if (waveButton) {
+              waveButton.disabled = false
+            }
+          })
+
+          if (waveButton) {
+            waveButton.disabled = false
+          }
+        }
       }
 
       scene.add(goat)
@@ -106,6 +165,11 @@ export const initScenePipelineModule = () => {
     // XR8.Threejs.pipelineModule()'s onStart method.
     onStart: ({canvas}) => {
       const {scene, camera, renderer} = XR8.Threejs.xrScene()  // Get the 3js scene from XR8.Threejs
+      waveButton = document.getElementById('wave-button')
+
+      if (waveButton) {
+        waveButton.addEventListener('click', playWave)
+      }
 
       initXrScene({scene, camera, renderer})  // Add objects set the starting camera position.
 
