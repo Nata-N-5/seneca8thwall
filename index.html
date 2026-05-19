@@ -9,11 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700;900&display=swap" rel="stylesheet">
 
-    <script
-      type="module"
-      src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js">
-    </script>
-
     <style>
       :root {
         color-scheme: dark;
@@ -102,12 +97,23 @@
         opacity: 0.9;
       }
 
-      model-viewer {
+      .viewer-wrap {
         width: 100%;
         height: min(55vh, 600px);
         align-self: center;
-        background: transparent;
         margin: 10px 0;
+      }
+
+      #goat-viewer {
+        display: block;
+        width: 100%;
+        height: 100%;
+        cursor: grab;
+        touch-action: none;
+      }
+
+      #goat-viewer:active {
+        cursor: grabbing;
       }
 
       .ar-button {
@@ -150,36 +156,6 @@
         background: rgba(4, 20, 7, 0.25);
       }
 
-      .action-row {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-        margin-bottom: 10px;
-      }
-
-      .eat-button {
-        min-width: 260px;
-        min-height: 52px;
-        padding: 0 32px;
-        border: 2px solid #52a11b;
-        border-radius: 999px;
-        color: #bdfc5d;
-        background: linear-gradient(180deg, rgba(2, 20, 12, 0.85), rgba(1, 12, 7, 0.95));
-        box-shadow:
-          0 0 15px rgba(111, 255, 0, 0.25),
-          inset 0 0 12px rgba(111, 255, 0, 0.15);
-        font-family: "Rajdhani", sans-serif;
-        font-size: 1.25rem;
-        font-weight: 700;
-        letter-spacing: 1px;
-        cursor: pointer;
-        transition: transform 0.2s;
-      }
-
-      .eat-button:active {
-        transform: scale(0.98);
-      }
-
       footer {
         position: relative;
         z-index: 2;
@@ -215,18 +191,9 @@
         </p>
       </header>
 
-      <model-viewer
-        id="goat-viewer" 
-        src="./public/goaat3.glb"
-        alt="Cabrita en vista 3D"
-        camera-controls
-        auto-rotate
-        autoplay
-        animation-name="idle"
-        shadow-intensity="1"
-        exposure="1"
-        interaction-prompt="auto">
-      </model-viewer>
+      <div class="viewer-wrap" aria-label="Cabrita en vista 3D">
+        <canvas id="goat-viewer"></canvas>
+      </div>
 
       <button id="open-ar" class="ar-button" type="button">
         <img src="site-assets/svg/camera-ON.svg" alt="Icono camara" />
@@ -234,56 +201,11 @@
         <span>Ver cabrita en AR</span>
       </button>
 
-      <div class="action-row">
-        <button id="change-color" class="eat-button" type="button">Cambiar reactivo</button>
-      </div>
-
       <footer>
         <div id="status-text" class="hint">Toca el boton superior para abrir la experiencia 8th Wall.</div>
       </footer>
     </main>
 
-    <script type="module">
-      const viewer = document.querySelector('#goat-viewer')
-      const openArButton = document.querySelector('#open-ar')
-      const changeButton = document.querySelector('#change-color')
-
-      const colors = [
-        [0, 1, 0.4, 1],
-        [1, 0, 1, 1],
-        [0, 0.8, 1, 1],
-        [1, 1, 0, 1],
-        [1, 0.4, 0, 1],
-      ]
-
-      let colorIndex = 0
-
-      const findEditableMaterial = () => {
-        if (!viewer.model) {
-          return null
-        }
-
-        return viewer.model.materials.find((material) => material.name.toLowerCase().includes('liquid'))
-          || viewer.model.materials.find((material) => material.name.toLowerCase().includes('material'))
-          || viewer.model.materials[0]
-      }
-
-      openArButton.addEventListener('click', () => {
-        window.location.href = './ar.html'
-      })
-
-      changeButton.addEventListener('click', async () => {
-        await viewer.updateComplete
-
-        const material = findEditableMaterial()
-
-        if (!material) {
-          return
-        }
-
-        colorIndex = (colorIndex + 1) % colors.length
-        material.pbrMetallicRoughness.setBaseColorFactor(colors[colorIndex])
-      })
-    </script>
+    <script type="module" src="src/home-viewer.js"></script>
   </body>
 </html>
