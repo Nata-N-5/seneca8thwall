@@ -1,7 +1,8 @@
 // Define an 8th Wall XR Camera Pipeline Module that adds a model to a threejs scene on startup.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import goatModel from './assets/goaat3.glb?url'
+
+const goatModel = './goaat3.glb'
 
 export const initScenePipelineModule = () => {
   const clock = new THREE.Clock()
