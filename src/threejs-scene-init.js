@@ -36,8 +36,10 @@ export const initScenePipelineModule = () => {
       return
     }
 
-    idleAction.reset()
-    idleAction.fadeIn(0.2)
+    idleAction.enabled = true
+    idleAction.setLoop(THREE.LoopRepeat)
+    idleAction.clampWhenFinished = false
+    idleAction.setEffectiveWeight(1)
     idleAction.play()
   }
 
@@ -50,18 +52,19 @@ export const initScenePipelineModule = () => {
       waveButton.disabled = true
     }
 
-    idleAction.fadeOut(0.15)
     waveAction.reset()
     waveAction.setLoop(THREE.LoopOnce, 1)
-    waveAction.clampWhenFinished = false
-    waveAction.fadeIn(0.15)
+    waveAction.clampWhenFinished = true
+    waveAction.setEffectiveWeight(1)
     waveAction.play()
+    waveAction.crossFadeFrom(idleAction, 0.2, false)
   }
 
   // Populates the goat model into an XR scene and sets the initial camera position.
   const initXrScene = ({scene, camera, renderer}) => {
     // Enable shadows in the renderer.
     renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
     renderer.outputColorSpace = THREE.SRGBColorSpace
 
     // Add some light to the scene.
@@ -74,6 +77,14 @@ export const initScenePipelineModule = () => {
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8)
     directionalLight.position.set(5, 10, 7)
     directionalLight.castShadow = true
+    directionalLight.shadow.mapSize.set(2048, 2048)
+    directionalLight.shadow.camera.near = 0.5
+    directionalLight.shadow.camera.far = 30
+    directionalLight.shadow.camera.left = -5
+    directionalLight.shadow.camera.right = 5
+    directionalLight.shadow.camera.top = 5
+    directionalLight.shadow.camera.bottom = -5
+    directionalLight.shadow.radius = 4
     scene.add(directionalLight)
 
     const loader = new GLTFLoader()
@@ -116,8 +127,8 @@ export const initScenePipelineModule = () => {
               return
             }
 
-            waveAction.fadeOut(0.1)
             playIdle()
+            waveAction.crossFadeTo(idleAction, 0.25, false)
 
             if (waveButton) {
               waveButton.disabled = false
